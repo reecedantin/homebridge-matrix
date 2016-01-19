@@ -1,12 +1,13 @@
 var Service;
 var Characteristic;
 
-var net = require('net'),
+var net = require('net');
 
 module.exports = function(homebridge) {
   Service = homebridge.hap.Service;
   Characteristic = homebridge.hap.Characteristic;
-  homebridge.registerAccessory('homebridge-tcp', 'TCP', TcpAccessory);
+
+  homebridge.registerAccessory("homebridge-tcp", "TCP", TcpAccessory);
 }
 
 function TcpAccessory(log, config) {
@@ -18,7 +19,7 @@ function TcpAccessory(log, config) {
   this.offCommand	   = config['off'];
   this.stateCommand	 = config['state'];
   this.onValue		   = config['on_value'] || "playing";
-  this.onValue	   	 = this.onValue.trim().toLowerCase();
+  this.onValue	   	 = this.onValue.trim();
   this.exactMatch	   = config['exact_match'] || true;
   this.host          = config['host'];
   this.port          = config['port'];
@@ -41,15 +42,22 @@ TcpAccessory.prototype.setState = function(powerOn, callback) {
   var host = this.host;
   var port = this.port;
 
+  accessory.log('starting set');
+
   var client = new net.Socket();
   client.connect(port, host, function() {
       accessory.log('CONNECTED TO: ' + host + ':' + port);
-      // Write a message to the socket as soon as the client is connected, the server will receive it as message from the client
-      client.write(command);
-  });
+      var date = new Date();
+      var curDate = null;
+      do { curDate = new Date(); }
+      while(curDate-date < 1000);
+      accessory.log('Was it written? -' + client.write(command + '\n') + '- '+ command);
+    });
+
+
 
   client.on('data', function(data) {
-      accessory.log('DATA: ' + data.toString('utf-8').trim().toLowerCase());
+      accessory.log('DATA: ' + data.toString('utf-8').trim());
       // Close the client socket completely
       client.destroy();
   });
@@ -74,27 +82,29 @@ TcpAccessory.prototype.getState = function(callback) {
   var client = new net.Socket();
   client.connect(port, host, function() {
       accessory.log('CONNECTED TO: ' + host + ':' + port);
-      // Write a message to the socket as soon as the client is connected, the server will receive it as message from the client
-      client.write(command);
+      var date = new Date();
+      var curDate = null;
+      do { curDate = new Date(); }
+      while(curDate-date < 1000);
+      accessory.log('Was it written? -' + client.write(command + '\n') + '- '+ command);
   });
 
   client.on('data', function(data) {
-      accessory.log('DATA: ' + data.toString('utf-8').trim().toLowerCase());
-      var state = data.toString('utf-8').trim().toLowerCase();
+      accessory.log('DATA: ' + data.toString('utf-8').trim());
+      var state = data.toString('utf-8').trim();
       accessory.log('State of ' + accessory.name + ' is: ' + state);
       callback(null, accessory.matchesString(state));
       client.destroy();
   });
 
-  client.on('close', function() {
-    accessory.log('Set ' + accessory.name + ' to ' + state);
-    callback(null);
-  });
+  accessory.log('here now');
 
   client.on('error', function (err) {
     accessory.log('Error: ' + err);
-    callback(err || new Error('Error setting ' + accessory.name + ' to ' + state));
+    callback(err || new Error('Error getting state from ' + accessory.name));
   });
+
+  accessory.log('all done');
 }
 
 TcpAccessory.prototype.getServices = function() {
