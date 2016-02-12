@@ -74,7 +74,7 @@ MatrixAccessory.prototype.setState = function(powerOn, callback) {
       else if(pass > 2 && isCarrot == ">")
       {
         accessory.log("is this a carrott? -"+isCarrot);
-        client.destroy();
+        client.write('q\r\n');
         pass = -1;
       }
       pass++;
