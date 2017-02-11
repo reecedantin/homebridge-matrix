@@ -1,7 +1,7 @@
-{
-  "name": "homebridge-matrix",
+ {
+  "name": "homebridge-sharptv",
   "version": "0.0.1",
-  "description": "HDMI Matrix plugin for Homebridge: https://github.com/nfarina/homebridge",
+  "description": "Sharp TV plugin for Homebridge: https://github.com/nfarina/homebridge",
   "license": "ISC",
   "keywords": [
     "homebridge-plugin"
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/reecedantin/homebridge-matrix.git"
+    "url": "git://github.com/reecedantin/homebridge-sharptv.git"
   },
   "dependencies": {
   }

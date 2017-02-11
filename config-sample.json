@@ -6,19 +6,19 @@
     "pin": "031-45-154"
   },
 
-  "description": "This is an example configuration for the SSH homebridge plugin",
+  "description": "This is an example configuration for the SharpTV homebridge plugin",
 
   "accessories": [
     {
-      "accessory": "TCP",
-      "name": "Zone 7",
-      "on": "*Z7POWER1",
-      "off": "*Z7POWER0",
-      "state": "*Z7POWER?",
-      "on_value" : "#Z7POWER1",
+      "accessory": "SharpTV",
+      "name": "Sharp TV",
+      "on": "POWR1   ",
+      "off": "POWR0   ",
+      "state": "POWR????",
+      "on_value" : "1",
       "exact_match": true,
-      "host": "192.168.0.22",
-      "port": 23
+      "host": "192.168.0.86",
+      "port": 10002
     }
   ]
 }
